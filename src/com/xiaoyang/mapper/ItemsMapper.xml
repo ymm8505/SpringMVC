@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace是mapper接口的全限定名-->
+<mapper namespace="com.xiaoyang.mapper.ItemsMapper">
+
+	<sql id="query_tiems_where">
+		<if test="itemsCustom != null">
+			<if test="itemsCustom.name != null and itemsCustom.name != ''">
+				items.name like '%${itemsCustom.name}%'	
+			</if>
+		</if>
+	</sql>
+
+	<!-- 商品列表查询 
+		parameterType 传入包装对象(包装了查询条件)
+		resultType 建议使用扩展对象
+	-->
+	<select id="selectByPrimaryKey" parameterType="Integer" 
+							   resultType="com.xiaoyang.po.ItemsCustom">
+		select * from items where items.id =#{_parameter}	
+	</select>
+	
+	<!-- 商品列表查询 
+		parameterType 传入包装对象(包装了查询条件)
+		resultType 建议使用扩展对象
+	-->
+	<update id="updateByPrimaryKey" parameterType="com.xiaoyang.po.ItemsCustom">
+    update items
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=REAL},
+      </if>
+      <if test="pic != null">
+        pic = #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+	
+</mapper>
